@@ -32,7 +32,7 @@ class Plugin(BasePlugin):
 
         @checked.setter
         def checked(self, value: bool):
-            self.checked = value
+            self._checked = value
 
     @property
     def name(self) -> str:
@@ -51,15 +51,27 @@ class Plugin(BasePlugin):
         return self._all_characteristic
 
     def __init__(self):
-        self._name = 'Информация о ЦПУ'
-        self._description = 'Собирает информацию о процессоре'
+        self._name = 'CPU Info'
+        self._description = 'Cpu Info'
         self._is_one = True
         self._all_characteristic = [
             self.Characteristic(
-                feature_name='Производитель',
-                description='Информация о производителе процессора',
+                feature_name='Тестирую киррилицу вашу мамашу',
+                description='Processor manufacturer',
                 checked=True,
-                collection_fn=self._collect_info_manufacturer)
+                collection_fn=self._collect_info_manufacturer),
+            self.Characteristic(
+                feature_name='Processor model',
+                description='Processor model',
+                checked=True,
+                collection_fn=self._collect_info_model
+            ),
+            self.Characteristic(
+                feature_name='Number of Cores',
+                description='Number of Cores',
+                checked=True,
+                collection_fn=self._collect_info_count
+            )
         ]
 
     def set_checked_for_characteristic(self, characteristic: BasePlugin.BaseCharacteristic, value: bool):
@@ -77,3 +89,11 @@ class Plugin(BasePlugin):
     @staticmethod
     def _collect_info_manufacturer() -> str:
         return cpuinfo.get_cpu_info()['vendor_id_raw']
+
+    @staticmethod
+    def _collect_info_model() -> str:
+        return cpuinfo.get_cpu_info()['brand_raw']
+
+    @staticmethod
+    def _collect_info_count() -> str:
+        return cpuinfo.get_cpu_info()['count']
