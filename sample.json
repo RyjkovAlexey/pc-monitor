@@ -1,0 +1,10 @@
+[
+  {
+    "_plugin_name": "CPU Info",
+    "_result_dict": {
+      "Тестирую киррилицу вашу мамашу": "GenuineIntel",
+      "Processor model": "Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz",
+      "Number of Cores": 12
+    }
+  }
+]
