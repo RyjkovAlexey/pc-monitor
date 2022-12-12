@@ -9,7 +9,7 @@ from silence_mode_app import SilenceModeApp
 class Application:
     @property
     def plugins(self) -> list[PluginLoader]:
-        return self._plugins
+        return self._loaders
 
     def __init__(self):
         arg_helper = ArgHelper()
@@ -24,14 +24,14 @@ class Application:
 
     def _init_plugins(self):
         self._log = logging.getLogger(self.__class__.__name__)
-        self._plugins: List[PluginLoader] = []
+        self._loaders: List[PluginLoader] = []
         for loader in PluginLoader.enumerate():
             try:
                 plugin = PluginLoader(self._log, loader)
             except PluginError:
                 self._log.error('Не удалось загрузить "%s"', loader, exc_info=True)
             else:
-                self._plugins.append(plugin)
+                self._loaders.append(plugin)
 
 
 if __name__ == '__main__':
