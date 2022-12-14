@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Dict, List
 
 from cpuinfo import cpuinfo
 
@@ -47,7 +47,7 @@ class Plugin(BasePlugin):
         return self._is_one
 
     @property
-    def all_characteristic(self) -> [BasePlugin.BaseCharacteristic]:
+    def all_characteristic(self) -> List[BasePlugin.BaseCharacteristic]:
         return self._all_characteristic
 
     def __init__(self):
@@ -56,19 +56,19 @@ class Plugin(BasePlugin):
         self._is_one = True
         self._all_characteristic = [
             self.Characteristic(
-                feature_name='Тестирую киррилицу вашу мамашу',
-                description='Processor manufacturer',
+                feature_name='Производитель',
+                description='Собирает информацию о производителе процессора',
                 checked=True,
                 collection_fn=self._collect_info_manufacturer),
             self.Characteristic(
-                feature_name='Processor model',
-                description='Processor model',
+                feature_name='Модель процессора',
+                description='Собирает информацию о модели',
                 checked=True,
                 collection_fn=self._collect_info_model
             ),
             self.Characteristic(
-                feature_name='Number of Cores',
-                description='Number of Cores',
+                feature_name='Количество ядер процессора',
+                description='Собирает информацию о количестве ядер',
                 checked=True,
                 collection_fn=self._collect_info_count
             )
@@ -77,7 +77,7 @@ class Plugin(BasePlugin):
     def set_checked_for_characteristic(self, characteristic: BasePlugin.BaseCharacteristic, value: bool):
         characteristic.checked = value
 
-    def collect_information(self) -> dict[BasePlugin.BaseCharacteristic, str]:
+    def collect_information(self) -> Dict[BasePlugin.BaseCharacteristic, str]:
         result_dict: dict[BasePlugin.BaseCharacteristic, str] = {}
 
         for characteristic in self.all_characteristic:

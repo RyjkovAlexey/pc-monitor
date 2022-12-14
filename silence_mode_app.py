@@ -1,7 +1,8 @@
 import json
 import pathlib
+import os
 from datetime import datetime
-from typing import Dict, Any
+from typing import Any, Dict, List
 
 from base_plugin import BasePlugin
 from loader import PluginLoader
@@ -9,7 +10,7 @@ from plugin_report import PluginReport
 
 
 class SilenceModeApp:
-    def __init__(self, export_path: str, _loaders: list[PluginLoader]):
+    def __init__(self, export_path: str, _loaders: List[PluginLoader]):
         self._export_path = export_path
         self._loaders: list[PluginLoader] = _loaders
 
@@ -18,7 +19,7 @@ class SilenceModeApp:
         self._write_result_to_file(res)
 
     @staticmethod
-    def _get_results(loader: PluginLoader) -> dict[str, Any]:
+    def _get_results(loader: PluginLoader) -> Dict[str, Any]:
         collected_info = loader.plugin.collect_information()
         aggregate_results: Dict[str, str] = {}
         for key in collected_info.keys():
@@ -26,8 +27,10 @@ class SilenceModeApp:
 
         return PluginReport(loader.plugin_name, aggregate_results).__dict__
 
-    def _write_result_to_file(self, res: list[dict[str, Any]]):
+    def _write_result_to_file(self, res: List[Dict[str, Any]]):
         path = pathlib.Path(f'{self._export_path}/{datetime.now().microsecond}.json')
+        if not path.parent.exists(): 
+            os.mkdir(path=path.parent)
         print(path)
         with open(path, 'w', encoding='utf-8') as outfile:
             outfile.write(json.dumps(res, ensure_ascii=False))

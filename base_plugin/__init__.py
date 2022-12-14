@@ -1,5 +1,5 @@
 import abc
-from typing import Callable
+from typing import Callable, Dict, List
 
 
 class BasePlugin(abc.ABC):
@@ -54,7 +54,7 @@ class BasePlugin(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def all_characteristic(self) -> [BaseCharacteristic]:
+    def all_characteristic(self) -> List[BaseCharacteristic]:
         '''Возвращает список характеристик'''
 
     @abc.abstractmethod
@@ -62,5 +62,5 @@ class BasePlugin(abc.ABC):
         characteristic.checked = value
 
     @abc.abstractmethod
-    def collect_information(self) -> dict[BaseCharacteristic, str]:
+    def collect_information(self) -> Dict[BaseCharacteristic, str]:
         '''Собирает всю информацию по отмеченным характеристикам и возвращает словарь'''
