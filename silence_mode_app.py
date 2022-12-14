@@ -31,6 +31,6 @@ class SilenceModeApp:
         path = pathlib.Path(f'{self._export_path}/{datetime.now().microsecond}.json')
         if not path.parent.exists(): 
             os.mkdir(path=path.parent)
-        print(path)
+
         with open(path, 'w', encoding='utf-8') as outfile:
             outfile.write(json.dumps(res, ensure_ascii=False))

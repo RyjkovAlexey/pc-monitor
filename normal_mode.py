@@ -1,28 +1,43 @@
 from tkinter import *
 from tkinter import ttk
 
-from typing import List
+from typing import List, Dict
+
+from base_plugin import BasePlugin
 from loader import PluginLoader
+from views.characteristics_frame import CharacteristicsFrame
+from views.main_frame import MainFrame
+from views.report_frame import ReportFrame
 
 
 class NormalMode:
 
     def __init__(self, loaders: List[PluginLoader]) -> None:
         self._loaders = loaders
-        self.root = Tk()
-        self.frm = ttk.Frame(self.root, padding=10)
-        self.frm.grid()
+        self._root = Tk()
+        self._root.geometry('800x600')
+        self._plugins: List[BasePlugin] = list(map(lambda x: x.plugin, self._loaders))
 
-        self._init_window()
+        self._current_frame: Frame = MainFrame(
+            self._plugins,
+            self._show_characteristic
+        )
 
-        self.root.mainloop()
+        self._current_frame.pack()
 
-    def _init_window(self) -> None:
-        ttk.Label(self.frm, text='Набор плагинов').grid(column=0, row=0)
-        ttk.Label(self.frm, text='Плагины по умолчанию').grid(column=0, row=1)
+        self._root.mainloop()
 
-        self.plugins_view = map()
+    def _show_characteristic(self):
+        self._current_frame.destroy()
 
-    @staticmethod
-    def create_plugin(plg: PluginLoader):
+        self._current_frame = CharacteristicsFrame(list(filter(lambda x: x.is_on, self._plugins)), self._show_reports)
+        self._current_frame.pack()
 
+    def _show_reports(self):
+        reports: Dict[BasePlugin, Dict[BasePlugin.BaseCharacteristic, str]] = {}
+        for plugin in self._plugins:
+            reports[plugin] = plugin.collect_information()
+
+        self._current_frame.destroy()
+        self._current_frame = ReportFrame(reports)
+        self._current_frame.pack()

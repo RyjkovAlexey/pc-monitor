@@ -44,7 +44,7 @@ class Plugin(BasePlugin):
 
     @property
     def is_on(self) -> bool:
-        return self._is_one
+        return self._is_on
 
     @property
     def all_characteristic(self) -> List[BasePlugin.BaseCharacteristic]:
@@ -53,7 +53,7 @@ class Plugin(BasePlugin):
     def __init__(self):
         self._name = 'CPU Info'
         self._description = 'Cpu Info'
-        self._is_one = True
+        self._is_on = True
         self._all_characteristic = [
             self.Characteristic(
                 feature_name='Производитель',
@@ -63,7 +63,7 @@ class Plugin(BasePlugin):
             self.Characteristic(
                 feature_name='Модель процессора',
                 description='Собирает информацию о модели',
-                checked=True,
+                checked=False,
                 collection_fn=self._collect_info_model
             ),
             self.Characteristic(
@@ -97,3 +97,7 @@ class Plugin(BasePlugin):
     @staticmethod
     def _collect_info_count() -> str:
         return cpuinfo.get_cpu_info()['count']
+
+    @is_on.setter
+    def is_on(self, val: bool):
+        self._is_on = val
